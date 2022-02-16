@@ -20,3 +20,12 @@ Note right of 包柏: 包柏思考中
 Note left of 艾莉絲: 艾莉絲回應
 艾莉絲->包柏: 最近過得怎樣？
 ```
+
+```mermaid
+graph LR
+    A[Start] --> B{Is it?};
+    B -- Yes --> C[OK];
+    C --> D[Rethink];
+    D --> B;
+    B -- No ---> E[End];
+```

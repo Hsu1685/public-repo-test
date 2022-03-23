@@ -1,5 +1,11 @@
 # public-repo-test
 
+## Table of Contents
+- [mermaid 甘特圖](#gantt-chart-by-mermaid)
+- [mermaid 程序圖](#sequence-diagram-by-mermaid)
+- [mermaid 流程圖](#flow-chart-by-mermaid)
+
+## Gantt chart by mermaid
 ```mermaid
 gantt
     title A Gantt Diagram
@@ -12,6 +18,7 @@ gantt
     anther task      : 24d
 ```
 
+## sequence diagram by mermaid
 ```mermaid
 sequenceDiagram
     艾莉絲->包柏: 哈摟，你好嗎？
@@ -21,6 +28,7 @@ Note left of 艾莉絲: 艾莉絲回應
 艾莉絲->包柏: 最近過得怎樣？
 ```
 
+## flow chart by mermaid
 ```mermaid
 graph LR
     A[Start] --> B{Is it?};

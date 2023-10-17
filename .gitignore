@@ -50,3 +50,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+linked-list/.vscode/settings.json
+linked-list/.vscode/tasks.json

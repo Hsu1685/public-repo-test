@@ -61,21 +61,30 @@
         const timerOptions = document.getElementsByName('timer');
         // 定义倒计时间隔变量
         let countdownInterval;
+        let remainingTime;
+        let isPaused = false;
 
         // 播放/暂停按钮点击事件
         playPauseBtn.addEventListener('click', function() {
             // 获取选中的倒计时时间
             let selectedTime = getSelectedTime();
-            if (audio.paused) {
-                // 如果音频暂停，则播放音频并启动倒计时
+            if (audio.paused && !isPaused) {
+                // 如果音频暂停且未暂停过，则播放音频并启动倒计时
                 audio.play();
                 playPauseBtn.textContent = 'Pause';
                 startCountdown(selectedTime * 60); // 将分钟转换为秒
+            } else if (audio.paused && isPaused) {
+                // 如果音频暂停且已暂停过，则继续播放音频并继续倒计时
+                audio.play();
+                playPauseBtn.textContent = 'Pause';
+                startCountdown(remainingTime);
+                isPaused = false;
             } else {
                 // 如果音频正在播放，则暂停音频并清除倒计时
                 audio.pause();
                 playPauseBtn.textContent = 'Play';
                 clearInterval(countdownInterval);
+                isPaused = true;
             }
         });
 
@@ -86,6 +95,7 @@
             audio.currentTime = 0;
             playPauseBtn.textContent = 'Play';
             clearInterval(countdownInterval);
+            isPaused = false;
             // 重置倒计时显示
             timerDisplay.textContent = getSelectedTime() + ':00';
         });
@@ -120,10 +130,12 @@
                     audio.pause();
                     audio.currentTime = 0;
                     playPauseBtn.textContent = 'Play';
-                    // 播放提示音
-                    // alertSound.play();
+                    // 提示訊息
                     alert('計時結束！');
                 }
+
+                // 保存剩余时间
+                remainingTime = timer;
             }, 1000);
         }
 

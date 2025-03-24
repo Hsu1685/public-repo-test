@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #timer {
+            font-size: 3em;
+        }
+    </style>
+</head>
+<body>
+    <div id="timer"></div>
+    <script>
+        function countdown(endDate) {
+            let timer, days, hours, minutes, seconds;
+            endDate = new Date(endDate).getTime();
+
+            if (isNaN(endDate)) return;
+
+            timer = setInterval(function() {
+                let now = new Date().getTime();
+                let timeRemaining = parseInt((endDate - now) / 1000);
+
+                if (timeRemaining >= 0) {
+                    days = parseInt(timeRemaining / 86400);
+                    timeRemaining = (timeRemaining % 86400);
+
+                    hours = parseInt(timeRemaining / 3600);
+                    timeRemaining = (timeRemaining % 3600);
+
+                    minutes = parseInt(timeRemaining / 60);
+                    seconds = parseInt(timeRemaining % 60);
+
+                    document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                } else {
+                    document.getElementById("timer").innerHTML = "Countdown finished!";
+                    clearInterval(timer);
+                }
+            }, 1000);
+        }
+
+        (function () { 
+            countdown('2025-12-31T00:00:00'); // 设置倒计时结束时间
+        }());
+    </script>
+</body>
+</html>

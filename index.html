@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Background Music with Controls</title>
+    <title>Background Music with Countdown Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,34 +14,125 @@
             height: 100vh;
             background-color: #f0f0f0;
         }
-        button {
+        button, input[type="radio"] {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
         }
+        #timer {
+            font-size: 2em;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Website</h1>
+    <h1>Welcome to Music Countdown Website</h1>
+    <!-- 音频元素，用于播放背景音乐 -->
     <audio id="background-music" loop>
         <source src="assets/music/background.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <!-- 选择倒计时时间的单选按钮 -->
+    <div>
+        <label>
+            <input type="radio" name="timer" value="20" checked> 20 minutes
+        </label>
+        <label>
+            <input type="radio" name="timer" value="30"> 30 minutes
+        </label>
+    </div>
+    <!-- 播放/暂停按钮 -->
     <button id="play-pause-btn">Play</button>
+    <!-- 停止按钮 -->
+    <button id="stop-btn">Stop</button>
+    <!-- 显示倒计时的元素 -->
+    <div id="timer">20:00</div>
 
     <script>
+        // 获取音频元素
         const audio = document.getElementById('background-music');
+        // 获取播放/暂停按钮
         const playPauseBtn = document.getElementById('play-pause-btn');
+        // 获取停止按钮
+        const stopBtn = document.getElementById('stop-btn');
+        // 获取显示倒计时的元素
+        const timerDisplay = document.getElementById('timer');
+        // 获取所有单选按钮
+        const timerOptions = document.getElementsByName('timer');
+        // 定义倒计时间隔变量
+        let countdownInterval;
 
+        // 播放/暂停按钮点击事件
         playPauseBtn.addEventListener('click', function() {
+            // 获取选中的倒计时时间
+            let selectedTime = getSelectedTime();
             if (audio.paused) {
+                // 如果音频暂停，则播放音频并启动倒计时
                 audio.play();
                 playPauseBtn.textContent = 'Pause';
+                startCountdown(selectedTime * 60); // 将分钟转换为秒
             } else {
+                // 如果音频正在播放，则暂停音频并清除倒计时
                 audio.pause();
                 playPauseBtn.textContent = 'Play';
+                clearInterval(countdownInterval);
             }
         });
+
+        // 停止按钮点击事件
+        stopBtn.addEventListener('click', function() {
+            // 暂停音频并重置播放时间
+            audio.pause();
+            audio.currentTime = 0;
+            playPauseBtn.textContent = 'Play';
+            clearInterval(countdownInterval);
+            // 重置倒计时显示
+            timerDisplay.textContent = getSelectedTime() + ':00';
+        });
+
+        // 获取选中的倒计时时间
+        function getSelectedTime() {
+            for (let option of timerOptions) {
+                if (option.checked) {
+                    return option.value;
+                }
+            }
+            return 20; // 如果没有选中任何选项，默认返回20分钟
+        }
+
+        // 启动倒计时函数
+        function startCountdown(duration) {
+            let timer = duration, minutes, seconds;
+            countdownInterval = setInterval(function() {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                // 更新倒计时显示
+                timerDisplay.textContent = minutes + ':' + seconds;
+
+                if (--timer < 0) {
+                    // 倒计时结束时执行的操作
+                    clearInterval(countdownInterval);
+                    timerDisplay.textContent = 'Time\'s up!';
+                    audio.pause();
+                    audio.currentTime = 0;
+                    playPauseBtn.textContent = 'Play';
+                    // 播放提示音
+                    // alertSound.play();
+                    alert('計時結束！');
+                }
+            }, 1000);
+        }
+
+        // 当单选按钮改变时更新倒计时显示
+        for (let option of timerOptions) {
+            option.addEventListener('change', function() {
+                timerDisplay.textContent = option.value + ':00';
+            });
+        }
     </script>
 </body>
 </html>

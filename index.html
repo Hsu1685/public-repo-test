@@ -112,18 +112,10 @@
 
         // 启动倒计时函数
         function startCountdown(duration) {
-            let timer = duration, minutes, seconds;
+            const endTime = Date.now() + duration * 1000;
             countdownInterval = setInterval(function() {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                minutes = minutes < 10 ? '0' + minutes : minutes;
-                seconds = seconds < 10 ? '0' + seconds : seconds;
-
-                // 更新倒计时显示
-                timerDisplay.textContent = minutes + ':' + seconds;
-
-                if (--timer < 0) {
+                const remainingTime = endTime - Date.now();
+                if (remainingTime <= 0) {
                     // 倒计时结束时执行的操作
                     clearInterval(countdownInterval);
                     timerDisplay.textContent = 'Time\'s up!';
@@ -132,10 +124,11 @@
                     playPauseBtn.textContent = 'Play';
                     // 提示訊息
                     alert('計時結束！');
+                } else {
+                    const minutes = Math.floor(remainingTime / 60000);
+                    const seconds = Math.floor((remainingTime % 60000) / 1000);
+                    timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
                 }
-
-                // 保存剩余时间
-                remainingTime = timer;
             }, 1000);
         }
 
